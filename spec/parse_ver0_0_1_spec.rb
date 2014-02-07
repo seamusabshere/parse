@@ -1,15 +1,6 @@
 require 'spec_helper'
 
-require 'multi_json'
-require 'active_support/core_ext'
-
-$lines = []
-
 describe Parse do
-  it 'should have a version number' do
-    Parse::VERSION.should_not be_nil
-  end
-
   {
     ''                                 => nil,
     'nil'                              => nil,
@@ -165,11 +156,5 @@ describe Parse do
         expect(got_with_spaces).to eq(expected)
       end
     end
-  end
-end
-
-at_exit do
-  $lines.each do |line|
-    $stderr.puts line
   end
 end

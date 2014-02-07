@@ -16,7 +16,7 @@ module Parse
   }
 
   def self.parse(raw, options = nil)
-    ver0 raw, options
+    ver0_0_1 raw, options
   end
 
   # @private

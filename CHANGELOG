@@ -1,0 +1,9 @@
+0.0.1.1 / 2014-02-06
+
+* Bug fixes
+
+  * Parse.parse called Parse.ver0 instead of Parse.ver0_0_1. Doh! 
+
+0.0.1 / 2014-02-06 [yanked]
+
+Initial release!
