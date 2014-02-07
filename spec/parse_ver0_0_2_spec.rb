@@ -1,7 +1,13 @@
 require 'spec_helper'
 
-describe Parse::Algorithm::Ver0_0_1 do
+describe Parse::Algorithm::Ver0_0_2 do
   {
+    "044-1-276-000"                    => "044-1-276-000",
+    '00-15'                            => '00-15',
+    '00-15.0'                          => '00-15.0',  # not octal
+
+
+    # EVERYTHING BELOW IS SAME AS 0.0.1
     ''                                 => nil,
     'nil'                              => nil,
     '15'                               => 15,
@@ -39,8 +45,6 @@ describe Parse::Algorithm::Ver0_0_1 do
     '-15,000.0'                        => -15_000.0,
     '-15_000.0'                        => -15_000.0,
     '-15_00_0.0'                       => -15_000.0,
-    '00-15'                            => -15,   # not octal
-    '00-15.0'                          => -15.0,  # not octal
     '0_0-15.0'                         => '0_0-15.0', # just weird
     '-0x15'                            => -0x15, # hex
     '-0o15'                            => -015,  # octal
@@ -140,7 +144,7 @@ describe Parse::Algorithm::Ver0_0_1 do
   }.each do |input, expected|
     it "parses #{input.inspect} as #{expected.inspect}" do
       input = Array.wrap input
-      got = Parse.ver0_0_1(*input)
+      got = Parse.ver0_0_2(*input)
       # $lines << [ "Parse.parse(#{input.inspect})".ljust(45), "#=> #{got.inspect}" ].join
       if expected.is_a?(Float) and expected.nan?
         expect(got.nan?).to eq(true)
@@ -149,7 +153,7 @@ describe Parse::Algorithm::Ver0_0_1 do
       end
 
       input_with_spaces = [ "\t" + input[0] + "\t", input[1] ]
-      got_with_spaces = Parse.ver0_0_1(*input_with_spaces)
+      got_with_spaces = Parse.ver0_0_2(*input_with_spaces)
       if expected.is_a?(Float) and expected.nan?
         expect(got.nan?).to eq(true)
       else
