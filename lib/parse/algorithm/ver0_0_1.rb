@@ -1,6 +1,12 @@
 module Parse
   module Algorithm
     class Ver0_0_1
+      NULL = [ '', '-', '?', 'N/A', 'n/a', 'NULL', 'null', '#REF!', '#NAME?', 'NIL', 'nil', 'NA', 'na', '#VALUE!', '#NULL!'] # from bigml's list
+      DATE = {
+        euro: ['%d-%m-%Y', '%d-%m-%y'],
+        us:   ['%m-%d-%Y', '%m-%d-%y'],
+      }
+
       attr_reader :raw
       attr_reader :options
       def initialize(raw, options = nil)

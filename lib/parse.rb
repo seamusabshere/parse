@@ -6,6 +6,7 @@ require 'parse/algorithm/ver0_0_2'
 require 'date'
 require 'yaml'
 require 'safe_yaml/load'
+require 'active_support/core_ext'
 
 module Parse
   def self.parse(raw, options = nil)
