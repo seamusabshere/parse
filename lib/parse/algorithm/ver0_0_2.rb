@@ -103,6 +103,7 @@ module Parse
 
         not_safe_for_yaml = nil
         not_safe_for_yaml ||= memo.include?('#')
+        not_safe_for_yaml ||= memo =~ /\A[@,]/
         not_safe_for_yaml ||= not_numeric && memo =~ /\A[\d,]+\z/ #1,2,3, maybe a csv
         safe_for_yaml = !not_safe_for_yaml
 

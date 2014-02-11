@@ -2,6 +2,9 @@ require 'spec_helper'
 
 describe Parse::Algorithm::Ver0_0_2 do
   {
+
+    "@ foo"                            => "@ foo",
+    ", foo"                            => ", foo",
     "044-1-276-000"                    => "044-1-276-000",
 
     ['1 BEDROOMS', { type: Numeric } ] => 1,
