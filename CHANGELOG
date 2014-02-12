@@ -1,3 +1,9 @@
+unreleased
+
+* Enhancements
+
+  * Recover from YAML parsing errors in 1.9
+
 0.0.1.1 / 2014-02-06
 
 * Bug fixes

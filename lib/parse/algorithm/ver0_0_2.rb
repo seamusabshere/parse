@@ -110,7 +110,7 @@ module Parse
         if safe_for_yaml
           begin
             memo = SafeYAML.load memo
-          rescue
+          rescue Exception # Psych::SyntaxError will blow up plain rescue in 1.9.3
             $stderr.puts "#{memo.inspect} => #{$!}"
           end
         end
