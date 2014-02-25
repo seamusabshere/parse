@@ -37,8 +37,33 @@ describe Parse::Algorithm::Ver0_0_2 do
 
     ['', {type: Numeric}]              => nil,
 
-    '-1_2.5e-1_3'                      => '-1_2.5e-1_3', # "regression"
+    # fortran double precision
+    '0.225120000000000D+06'            => 0.22512e6,
+    '0.341913000000000D+07'            => 0.341913e7,
+    '0.2500000E-01'                    => 0.25e-1,
+    '3.1D0'                            => 3.1,
+    '-2.D0'                            => -2.0,
+
+    '8e-05'                            => 8e-5,
+    '8e+4'                             => 8e4,
+    '8.0e+4'                           => 8.0e4,
+    '8e-4'                             => 8e-4,
+    '8.0e-4'                           => 8.0e-4,
+    '-8e+4'                            => -8e4,
+    '-8.0e+4'                          => -8.0e4,
+    '-8e-4'                            => -8e-4,
+    '-8.0e-4'                          => -8.0e-4,
+    '8E+4'                             => 8e4,
+    '8.0E+4'                           => 8.0e4,
+    '8E-4'                             => 8e-4,
+    '8.0E-4'                           => 8.0e-4,
+    '-8E+4'                            => -8e4,
+    '-8.0E+4'                          => -8.0e4,
+    '-8E-4'                            => -8e-4,
+    '-8.0E-4'                          => -8.0e-4,
+
     # EVERYTHING BELOW IS SAME AS 0.0.1
+    
     ''                                 => nil,
     'nil'                              => nil,
     '15'                               => 15,
@@ -56,6 +81,7 @@ describe Parse::Algorithm::Ver0_0_2 do
     '0o15'                             => 015,  # octal
     '8e-05'                            => 8e-05,
     '1_2.5e-1_3'                       => 12.5e-13,
+    '-1_2.5e-1_3'                      => -12.5e-13,
     '$123.4'                           => 123.4,
     '0$123.4'                           => 123.4,
     '$15,000'                          => 15_000,
@@ -180,6 +206,8 @@ describe Parse::Algorithm::Ver0_0_2 do
       # $lines << [ "Parse.parse(#{input.inspect})".ljust(45), "#=> #{got.inspect}" ].join
       if expected.is_a?(Float) and expected.nan?
         expect(got.nan?).to eq(true)
+      elsif expected.is_a?(Float) and got.is_a?(Float)
+        expect(got.round(8)).to eq(expected.round(8))
       else
         expect(got).to eq(expected)
       end
@@ -188,6 +216,8 @@ describe Parse::Algorithm::Ver0_0_2 do
       got_with_spaces = Parse.ver0_0_2(*input_with_spaces)
       if expected.is_a?(Float) and expected.nan?
         expect(got.nan?).to eq(true)
+      elsif expected.is_a?(Float) and got.is_a?(Float)
+        expect(got.round(8)).to eq(expected.round(8))
       else
         expect(got_with_spaces).to eq(expected)
       end

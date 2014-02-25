@@ -71,10 +71,10 @@ module Parse
           possible_numeric = true
           not_numeric = false
         else
-          not_numeric ||= memo =~ /[1-9][^\d_,%\.)eE]/ # has a dash in the middle
+          not_numeric ||= memo =~ /[1-9][^)\d_,%.eE]/ # has a dash in the middle
           not_numeric ||= memo =~ /,\d{1,2},/ # comma not used for thousands, like 10,20,30
           not_numeric ||= memo =~ /\..*,/ # comma following a period, like 1.0,2
-          not_numeric ||= memo.scan(/\D/).length > memo.scan(/\d/).length
+          not_numeric ||= memo.scan(/[^\d_,%.eE]/).length > memo.scan(/[\d_,%.eE]/).length
           not_numeric ||= memo =~ /\A[^(+\-\$0-9%]/ # starts with letter or smth
           possible_numeric = !not_numeric
         end
@@ -89,6 +89,7 @@ module Parse
           # in yaml 1.1, anything starting with zero is treated as octal... in 1.2, it's 0o
           memo.sub!(/0+/, '') if memo =~ /\A[+\-]?0+[+\-\$]?[1-9]+/ # leading zeros
           memo.delete!('$') if memo =~ /\A[+\-]?0*\$/
+          memo.sub!('D', 'e') if memo =~ /\A[+\-]?[\d.]*\dD[+\-]?[\d.]+\z/ # fortran double precision
           if memo.include?(',')
             a, b = memo.split('.', 2)
             a.delete! ','
