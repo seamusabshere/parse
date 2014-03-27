@@ -1,6 +1,6 @@
 module Parse
   module Algorithm
-    class Ver0_0_2
+    class Ver0_1_0
       NULL = [ '', '-', '?', 'N/A', 'n/a', 'NULL', 'null', '#REF!', '#NAME?', 'NIL', 'nil', 'NA', 'na', '#VALUE!', '#NULL!', '00/00/00', '0000-00-00'] # from bigml's list
       REGION_DATE_FORMAT = {
         euro: ['%d-%m-%Y', '%d-%m-%y'],
@@ -71,16 +71,16 @@ module Parse
           possible_numeric = true
           not_numeric = false
         else
-          not_numeric ||= memo =~ /[1-9][^)\d_,%.eE]/ # has a dash in the middle
-          not_numeric ||= memo =~ /,\d{1,2},/ # comma not used for thousands, like 10,20,30
-          not_numeric ||= memo =~ /\..*,/ # comma following a period, like 1.0,2
+          # not_numeric ||= memo =~ /[1-9][^)\d_,%.eE]/ # has a dash in the middle
+          not_numeric ||= memo.include?('_')
+          not_numeric ||= memo =~ %r{[1-9][/-]\d}
+          not_numeric ||= memo =~ /,\d{1,2}(?:[.\D]|\z)/
           not_numeric ||= memo.scan(/[^\d_,%.eE]/).length > memo.scan(/[\d_,%.eE]/).length
           not_numeric ||= memo =~ /\A[^(+\-\$0-9%]/ # starts with letter or smth
           possible_numeric = !not_numeric
         end
         accounting_negative = nil
         percentage = nil
-
         if possible_numeric
           accounting_negative = memo =~ /\A[0$]*\([0$]*/
           percentage = memo.end_with?('%')
@@ -89,7 +89,7 @@ module Parse
           # in yaml 1.1, anything starting with zero is treated as octal... in 1.2, it's 0o
           memo.sub!(/0+/, '') if memo =~ /\A[+\-]?0+[+\-\$]?[1-9]+/ # leading zeros
           memo.delete!('$') if memo =~ /\A[+\-]?0*\$/
-          memo.sub!('D', 'e') if memo =~ /\A[+\-]?[\d.]*\dD[+\-]?[\d.]+\z/ # fortran double precision
+          memo.sub!('D', 'e') if memo =~ /\A[+\-]?[\d.]+D[+\-]?[\d.]+\z/ # fortran double precision
           if memo.include?(',')
             a, b = memo.split('.', 2)
             a.delete! ','
@@ -97,15 +97,17 @@ module Parse
           end
         end
 
-        # binding.pry if memo =~ /sqft/i
         if certain_numeric
           memo.gsub! /[a-z]/i, ''
         end
 
         not_safe_for_yaml = nil
+        not_safe_for_yaml ||= memo =~ /\A(on|off)\z/i
         not_safe_for_yaml ||= memo.include?('#')
-        not_safe_for_yaml ||= memo =~ /\A[@,]/
-        not_safe_for_yaml ||= not_numeric && memo =~ /\A[\d,]+\z/ #1,2,3, maybe a csv
+        not_safe_for_yaml ||= memo =~ /\A[@&,]/
+        not_safe_for_yaml ||= not_numeric && memo.start_with?('0')
+        not_safe_for_yaml ||= not_numeric && memo =~ /\A[^{\[]*\d[,_]/ #1,2,3, maybe a csv
+
         safe_for_yaml = !not_safe_for_yaml
 
         if safe_for_yaml

@@ -1,7 +1,13 @@
-unreleased
+0.1.0
+
+* Breaking changes
+
+  * Not parsed as numbers anymore: "10_14" or "10_400" or "-1_2e3_5" or "-$123_456.7" -- very unlikely to see in the wild
+  * Not parsed as numbers anymore: '1,2' or '-1,2' or '1,20' or '1,22.0' -- too hard to distinguish from CSV
 
 * Enhancements
 
+  * Using proper versioning scheme - every version of algorithm involves a minor bump!
   * Recover from YAML parsing errors in 1.9
 
 0.0.1.1 / 2014-02-06

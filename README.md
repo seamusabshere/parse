@@ -4,9 +4,11 @@ Detect and convert short strings into integers, floats, dates, times, booleans, 
 
 ## Note on versions
 
-You can always use `Parse.parse`. It will always point to the most recent version of the algorithm (currently `Parse.ver0_0_1`).
+You can always use `Parse.parse`. It will always point to the most recent version of the algorithm (currently `Parse.ver0_1_0`).
 
 If the algorithm changes and you need the old version, you can reference it by its version number. For example, `Parse.ver0_0_1`.
+
+Since almost any change to the algorithm is a breaking change, there are going to be lots of minor version bumps (as opposed to patches).
 
 ## Usage
 
@@ -39,26 +41,24 @@ More esoteric stuff:
     Parse.parse("-")                             #=> nil
     Parse.parse("?")                             #=> nil
     Parse.parse("-8e-05")                        #=> -8.0e-05
-    Parse.parse("-1_2.5e-1_3")                   #=> -1.25e-12
+    Parse.parse("-12.5e-13")                   #=> -1.25e-12
     Parse.parse("05753")                         #=> 5753
-    Parse.parse("15_000")                        #=> 15000
-    Parse.parse("15_00_0")                       #=> 15000
+    Parse.parse("15000")                        #=> 15000
     Parse.parse("15.0")                          #=> 15.0
     Parse.parse("15,000.0")                      #=> 15000.0
-    Parse.parse("15_000.0")                      #=> 15000.0
-    Parse.parse("15_00_0.0")                     #=> 15000.0
+    Parse.parse("15000.0")                      #=> 15000.0
     Parse.parse("0015")                          #=> 15
     Parse.parse("0015.0")                        #=> 15.0
-    Parse.parse("0_015.0")                       #=> 15.0
+    Parse.parse("0015.0")                       #=> 15.0
     Parse.parse("0x15")                          #=> 21
     Parse.parse("0o15")                          #=> 13
     Parse.parse("8e-05")                         #=> 8.0e-05
-    Parse.parse("1_2.5e-1_3")                    #=> 1.25e-12
+    Parse.parse("12.5e-13")                    #=> 1.25e-12
     Parse.parse("0$123.4")                       #=> 123.4
     Parse.parse("$15,000")                       #=> 15000
     Parse.parse("0$15,000")                      #=> 15000
-    Parse.parse("$123_456")                      #=> 123456
-    Parse.parse("$123_456.7")                    #=> 123456.7
+    Parse.parse("$123456")                      #=> 123456
+    Parse.parse("$123456.7")                    #=> 123456.7
     Parse.parse("10,000,000")                    #=> 10000000
     Parse.parse("10,000,000.00")                 #=> 10000000.0
     Parse.parse("$10,000,000.00")                #=> 10000000.0
@@ -66,15 +66,13 @@ More esoteric stuff:
     Parse.parse("$010,000,000.00")               #=> 10000000.0
     Parse.parse("-15")                           #=> -15
     Parse.parse("-15,000")                       #=> -15000
-    Parse.parse("-15_000")                       #=> -15000
-    Parse.parse("-15_00_0")                      #=> -15000
+    Parse.parse("-15000")                       #=> -15000
     Parse.parse("-15.0")                         #=> -15.0
     Parse.parse("-15,000.0")                     #=> -15000.0
-    Parse.parse("-15_000.0")                     #=> -15000.0
-    Parse.parse("-15_00_0.0")                    #=> -15000.0
+    Parse.parse("-15000.0")                     #=> -15000.0
+    Parse.parse("-15000.0")                    #=> -15000.0
     Parse.parse("00-15")                         #=> -15
     Parse.parse("00-15.0")                       #=> -15.0
-    Parse.parse("0_0-15.0")                      #=> "0_0-15.0"
     Parse.parse("-0x15")                         #=> -21
     Parse.parse("-0o15")                         #=> -13
     Parse.parse("-$123.4")                       #=> -123.4
@@ -82,10 +80,10 @@ More esoteric stuff:
     Parse.parse("0($123.4)")                     #=> -123.4
     Parse.parse("-$15,000")                      #=> -15000
     Parse.parse("($15,000)")                     #=> -15000
-    Parse.parse("-$123_456")                     #=> -123456
-    Parse.parse("($123_456)")                    #=> -123456
-    Parse.parse("-$123_456.7")                   #=> -123456.7
-    Parse.parse("($123_456.7)")                  #=> -123456.7
+    Parse.parse("-$123,456")                     #=> -123456
+    Parse.parse("($123,456)")                    #=> -123456
+    Parse.parse("-$123,456.7")                   #=> -123456.7
+    Parse.parse("($123,456.7)")                  #=> -123456.7
     Parse.parse("-10,000,000")                   #=> -10000000
     Parse.parse("(10,000,000)")                  #=> -10000000
     Parse.parse("-10,000,000.00")                #=> -10000000.0
